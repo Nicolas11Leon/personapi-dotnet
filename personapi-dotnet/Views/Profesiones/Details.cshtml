@@ -1,0 +1,9 @@
+@model personapi_dotnet.Models.Entities.Profesion
+@{ ViewData["Title"] = "Detalle"; }
+<h1>Detalle de profesión</h1>
+<dl class="row">
+    <dt class="col-sm-3">@Html.DisplayNameFor(m => m.Id)</dt><dd class="col-sm-9">@Model.Id</dd>
+    <dt class="col-sm-3">@Html.DisplayNameFor(m => m.Nom)</dt><dd class="col-sm-9">@Model.Nom</dd>
+    <dt class="col-sm-3">@Html.DisplayNameFor(m => m.Des)</dt><dd class="col-sm-9">@Model.Des</dd>
+    </dl>
+<a asp-action="Edit" asp-route-id="@Model.Id">Editar</a> | <a asp-action="Index">Volver</a>

@@ -1,0 +1,12 @@
+@{ ViewData["Title"] = "PersonAPI"; }
+<div class="text-center">
+    <h1 class="display-5">PersonAPI</h1>
+    <p>Monolito ASP.NET Core MVC con patrón DAO/Repositorio, EF Core y SQL Server.</p>
+</div>
+<div class="row text-center mt-4">
+    <div class="col"><a class="btn btn-outline-primary" asp-controller="Personas" asp-action="Index">Personas</a></div>
+    <div class="col"><a class="btn btn-outline-primary" asp-controller="Profesiones" asp-action="Index">Profesiones</a></div>
+    <div class="col"><a class="btn btn-outline-primary" asp-controller="Estudios" asp-action="Index">Estudios</a></div>
+    <div class="col"><a class="btn btn-outline-primary" asp-controller="Telefonos" asp-action="Index">Teléfonos</a></div>
+    <div class="col"><a class="btn btn-outline-success" href="/swagger">Swagger (REST)</a></div>
+</div>

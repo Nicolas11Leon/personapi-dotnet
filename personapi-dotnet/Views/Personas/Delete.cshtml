@@ -1,0 +1,16 @@
+@model personapi_dotnet.Models.Entities.Persona
+@{ ViewData["Title"] = "Eliminar"; }
+<h1>Eliminar persona</h1>
+<h3 class="text-danger">¿Está seguro de eliminar este registro?</h3>
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<dl class="row">
+    <dt class="col-sm-3">@Html.DisplayNameFor(m => m.Cc)</dt><dd class="col-sm-9">@Model.Cc</dd>
+    <dt class="col-sm-3">@Html.DisplayNameFor(m => m.Nombre)</dt><dd class="col-sm-9">@Model.Nombre</dd>
+    <dt class="col-sm-3">@Html.DisplayNameFor(m => m.Apellido)</dt><dd class="col-sm-9">@Model.Apellido</dd>
+    <dt class="col-sm-3">@Html.DisplayNameFor(m => m.Genero)</dt><dd class="col-sm-9">@Model.Genero</dd>
+    <dt class="col-sm-3">@Html.DisplayNameFor(m => m.Edad)</dt><dd class="col-sm-9">@Model.Edad</dd>
+    </dl>
+<form asp-action="Delete" method="post">
+    <input type="hidden" name="id" value="@Model.Cc" />
+    <input type="submit" value="Eliminar" class="btn btn-danger" /> <a asp-action="Index">Cancelar</a>
+</form>

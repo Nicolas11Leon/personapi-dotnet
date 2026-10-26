@@ -1,0 +1,18 @@
+@model IEnumerable<personapi_dotnet.Models.Entities.Telefono>
+@{ ViewData["Title"] = "Teléfonos"; }
+<h1>Teléfonos</h1>
+<p><a asp-action="Create" class="btn btn-primary">Crear teléfono</a></p>
+<table class="table table-striped">
+    <thead><tr><th>@Html.DisplayNameFor(m => m.First().Num)</th><th>@Html.DisplayNameFor(m => m.First().Oper)</th><th>@Html.DisplayNameFor(m => m.First().Duenio)</th><th></th></tr></thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr><td>@item.Num</td><td>@item.Oper</td><td>@item.Duenio - @item.DuenioNavigation?.Nombre @item.DuenioNavigation?.Apellido</td>
+            <td>
+                <a asp-action="Details" asp-route-id="@item.Num">Detalle</a> |
+                <a asp-action="Edit" asp-route-id="@item.Num">Editar</a> |
+                <a asp-action="Delete" asp-route-id="@item.Num">Eliminar</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

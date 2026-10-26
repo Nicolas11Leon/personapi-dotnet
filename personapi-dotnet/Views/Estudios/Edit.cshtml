@@ -1,0 +1,15 @@
+@using Microsoft.AspNetCore.Mvc.Rendering
+@model personapi_dotnet.Models.Entities.Estudio
+@{ ViewData["Title"] = "Editar"; }
+<h1>Editar estudio</h1>
+<div class="row"><div class="col-md-5">
+    <form asp-action="Edit" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="mb-3"><label asp-for="IdProf" class="form-label"></label>@Model.IdProfNavigation?.Nom<input type="hidden" asp-for="IdProf" /></div>
+        <div class="mb-3"><label asp-for="CcPer" class="form-label"></label>@Model.CcPer - @Model.CcPerNavigation?.Nombre @Model.CcPerNavigation?.Apellido<input type="hidden" asp-for="CcPer" /></div>
+        <div class="mb-3"><label asp-for="Fecha" class="form-label"></label><input asp-for="Fecha" class="form-control" /><span asp-validation-for="Fecha" class="text-danger"></span></div>
+        <div class="mb-3"><label asp-for="Univer" class="form-label"></label><input asp-for="Univer" class="form-control" /><span asp-validation-for="Univer" class="text-danger"></span></div>
+        <input type="submit" value="Guardar" class="btn btn-primary" /> <a asp-action="Index">Volver</a>
+    </form>
+</div></div>
+@section Scripts { @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); } }

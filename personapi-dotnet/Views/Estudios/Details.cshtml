@@ -1,0 +1,10 @@
+@model personapi_dotnet.Models.Entities.Estudio
+@{ ViewData["Title"] = "Detalle"; }
+<h1>Detalle de estudio</h1>
+<dl class="row">
+    <dt class="col-sm-3">@Html.DisplayNameFor(m => m.IdProf)</dt><dd class="col-sm-9">@Model.IdProfNavigation?.Nom</dd>
+    <dt class="col-sm-3">@Html.DisplayNameFor(m => m.CcPer)</dt><dd class="col-sm-9">@Model.CcPer - @Model.CcPerNavigation?.Nombre @Model.CcPerNavigation?.Apellido</dd>
+    <dt class="col-sm-3">@Html.DisplayNameFor(m => m.Fecha)</dt><dd class="col-sm-9">@Model.Fecha?.ToString("yyyy-MM-dd")</dd>
+    <dt class="col-sm-3">@Html.DisplayNameFor(m => m.Univer)</dt><dd class="col-sm-9">@Model.Univer</dd>
+    </dl>
+<a asp-action="Edit" asp-route-idProf="@Model.IdProf" asp-route-ccPer="@Model.CcPer">Editar</a> | <a asp-action="Index">Volver</a>
