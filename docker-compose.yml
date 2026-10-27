@@ -1,9 +1,64 @@
 # SQL Server 2022 para desarrollo (alternativa a SQL Server Express en Windows)
+# + inicialización de la BD + API ASP.NET Core (.NET 8)
+#
+# La contraseña de sa puede sobreescribirse con la variable MSSQL_SA_PASSWORD
+# (por ejemplo en un archivo .env junto a este compose).
 services:
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2022-latest
     container_name: personapi-sql
     environment:
       ACCEPT_EULA: "Y"
-      MSSQL_SA_PASSWORD: "Your_password123"
+      MSSQL_SA_PASSWORD: "${MSSQL_SA_PASSWORD:-Your_password123}"
     ports: ["1433:1433"]
+    volumes:
+      - mssql-data:/var/opt/mssql
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -C -S localhost -U sa -P \"$$MSSQL_SA_PASSWORD\" -Q 'SELECT 1' -b -o /dev/null"]
+      interval: 10s
+      timeout: 10s
+      retries: 30
+      start_period: 180s
+      start_interval: 5s
+
+  db-init:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: personapi-db-init
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+    environment:
+      DB_HOST: sqlserver
+      MSSQL_SA_PASSWORD: "${MSSQL_SA_PASSWORD:-Your_password123}"
+    volumes:
+      - ./db:/scripts:ro
+    entrypoint: ["/bin/bash", "/scripts/init.sh"]
+    restart: "no"
+
+  api:
+    build:
+      context: ./personapi-dotnet
+      dockerfile: Dockerfile
+    image: personapi-dotnet:8.0
+    container_name: personapi-api
+    depends_on:
+      db-init:
+        condition: service_completed_successfully
+    environment:
+      ASPNETCORE_ENVIRONMENT: "${ASPNETCORE_ENVIRONMENT:-Development}"
+      ConnectionStrings__PersonaDb: "Server=sqlserver,1433;Database=persona_db;User Id=sa;Password=${MSSQL_SA_PASSWORD:-Your_password123};TrustServerCertificate=true"
+    ports: ["5080:8080"]
+
+  # Pruebas unitarias + integración (no requiere SQL Server: usa SQLite en memoria)
+  # docker compose --profile test run --rm tests
+  tests:
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+    image: personapi-dotnet-tests:8.0
+    profiles: ["test"]
+    volumes:
+      - ./TestResults:/src/TestResults
+
+volumes:
+  mssql-data:

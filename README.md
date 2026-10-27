@@ -6,54 +6,64 @@ Laboratorio 1 – Arquitectura de Software. Monolito **ASP.NET Core MVC** con pa
 - **API REST** (`/api/personas`, `/api/profesiones`, `/api/telefonos`, `/api/estudios`) documentada con **Swagger** (`/swagger`).
 
 ## Stack
-.NET 7 (`net7.0`) · EF Core 7 · SQL Server 2019 Express / 2022 · Swashbuckle (OpenAPI) · Bootstrap.
+.NET 8 (`net8.0`) · EF Core 8 · SQL Server 2022 · Swashbuckle (OpenAPI) · Bootstrap · xUnit · NSubstitute · TestServer (WebApplicationFactory).
 
 ## Estructura
 ```
-db/01_ddl.sql, db/02_dml.sql      Script DDL y DML
-docs/Informe.docx                 Documento del laboratorio
-personapi-dotnet/
-  Models/Entities/                Entidades + PersonaDbContext (estilo Scaffold-DbContext)
-  Repositories/Interfaces/        Interfaces DAO
-  Repositories/                   Implementaciones con EF Core
-  Controllers/                    Controladores MVC (vistas)
-  Controllers/Api/                Controladores REST
-  Views/                          Vistas Razor
+db/01_ddl.sql, db/02_dml.sql, db/init.sh   Scripts de BD e inicialización automática
+docs/Informe.docx                          Documento del laboratorio
+personapi-dotnet/                          Proyecto principal Web (MVC + API REST)
+  Models/Entities/                         Entidades + PersonaDbContext
+  Repositories/Interfaces/                 Interfaces DAO
+  Repositories/                            Implementaciones con EF Core
+  Controllers/                             Controladores MVC (vistas)
+  Controllers/Api/                         Controladores REST
+  Views/                                   Vistas Razor
+tests/
+  personapi-dotnet.UnitTests/              Pruebas unitarias (xUnit + NSubstitute + DataAnnotations)
+  personapi-dotnet.IntegrationTests/       Pruebas de integración (WebApplicationFactory + SQLite en memoria)
 ```
 
 ## Modelo de datos
 `persona(cc PK, nombre, apellido, genero, edad)` · `profesion(id PK, nom, des)` ·
 `telefono(num PK, oper, duenio FK→persona)` · `estudios(id_prof FK, cc_per FK, fecha, univer)` con PK compuesta (`id_prof`,`cc_per`).
 
-## Configurar el ambiente
-1. Instalar SQL Server Express (o 2022) y SSMS; o usar Docker (ver abajo).
-2. Crear la BD y datos: ejecutar en SSMS `db/01_ddl.sql` y luego `db/02_dml.sql` (crea `persona_db`).
-3. Instalar el SDK de .NET 7 (o superior con *roll-forward*, ver nota) y/o Visual Studio 2022.
-4. Ajustar la cadena de conexión `ConnectionStrings:PersonaDb` en `personapi-dotnet/appsettings.json`
-   (por defecto `Server=localhost\SQLEXPRESS;Database=persona_db;Trusted_Connection=True;TrustServerCertificate=true`).
-   `appsettings.Development.json` apunta a un SQL Server en Docker (`localhost,1433`, usuario `sa`).
-
-### SQL Server con Docker (opcional)
+## Despliegue con Docker Compose (Recomendado)
+Levanta SQL Server 2022, inicializa la BD automáticamente con los scripts DDL/DML y compila/despliega la API en .NET 8:
 ```bash
-docker compose up -d
-docker cp db/01_ddl.sql personapi-sql:/tmp/ && docker cp db/02_dml.sql personapi-sql:/tmp/
-docker exec personapi-sql /opt/mssql-tools18/bin/sqlcmd -C -S localhost -U sa -P 'Your_password123' -i /tmp/01_ddl.sql
-docker exec personapi-sql /opt/mssql-tools18/bin/sqlcmd -C -S localhost -U sa -P 'Your_password123' -i /tmp/02_dml.sql
-```
-
-## Compilar y desplegar
-```bash
-cd personapi-dotnet
-dotnet restore
-dotnet build
-ASPNETCORE_ENVIRONMENT=Development ASPNETCORE_URLS=http://localhost:5080 dotnet run
+docker compose up -d --build
 ```
 - Aplicación MVC: http://localhost:5080/
-- Swagger: http://localhost:5080/swagger
+- Documentación Swagger: http://localhost:5080/swagger
 
-Publicar: `dotnet publish -c Release -o publish` y ejecutar `dotnet publish/personapi-dotnet.dll`.
+Para ver logs del servicio:
+```bash
+docker compose logs -f api
+```
 
-> Nota: si solo tiene instalado .NET 8+, ejecute con `DOTNET_ROLL_FORWARD=Major`.
+## Pruebas (Testing en .NET 8)
+El proyecto incluye **40 pruebas automáticas** que cubren:
+- **Unitarias:** Controladores API y MVC con repositorios simulados (`NSubstitute`), y reglas de validación en modelos (`DataAnnotations`).
+- **Integración:** Repositorios contra SQLite relacional en memoria (valida PK, FK y restricciones), pruebas de endpoints HTTP con `WebApplicationFactory<Program>`, y renderizado de vistas Razor / Swagger.
+
+### 1. Ejecutar pruebas con Docker (sin instalar SDK local):
+```bash
+docker compose --profile test run --rm tests
+```
+Los resultados y reportes de cobertura se guardan en el directorio `./TestResults/`.
+
+### 2. Ejecutar pruebas localmente (con SDK .NET 8 instalado):
+```bash
+dotnet test personapi-dotnet.sln --logger "console;verbosity=normal"
+```
+
+## Compilar y desplegar localmente (sin Docker)
+```bash
+dotnet restore personapi-dotnet.sln
+dotnet build personapi-dotnet.sln
+cd personapi-dotnet
+ASPNETCORE_ENVIRONMENT=Development ASPNETCORE_URLS=http://localhost:5080 dotnet run
+```
 
 ## Regenerar entidades desde la BD (opcional)
 ```

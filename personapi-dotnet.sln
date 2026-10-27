@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "personapi-dotnet", "personapi-dotnet\personapi-dotnet.csproj", "{142799AA-48CA-4051-8BF7-268B0FE754AA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{130D168A-C1EC-4634-B9CA-D9B34B42E1AE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "personapi-dotnet.UnitTests", "tests\personapi-dotnet.UnitTests\personapi-dotnet.UnitTests.csproj", "{383E9E6C-BBFC-4CBA-A50E-78B58965A571}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "personapi-dotnet.IntegrationTests", "tests\personapi-dotnet.IntegrationTests\personapi-dotnet.IntegrationTests.csproj", "{C9B37062-020C-43FD-9AD3-4FB47FE45CE1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{142799AA-48CA-4051-8BF7-268B0FE754AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{142799AA-48CA-4051-8BF7-268B0FE754AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{142799AA-48CA-4051-8BF7-268B0FE754AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{142799AA-48CA-4051-8BF7-268B0FE754AA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{383E9E6C-BBFC-4CBA-A50E-78B58965A571}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{383E9E6C-BBFC-4CBA-A50E-78B58965A571}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{383E9E6C-BBFC-4CBA-A50E-78B58965A571}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{383E9E6C-BBFC-4CBA-A50E-78B58965A571}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C9B37062-020C-43FD-9AD3-4FB47FE45CE1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C9B37062-020C-43FD-9AD3-4FB47FE45CE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C9B37062-020C-43FD-9AD3-4FB47FE45CE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C9B37062-020C-43FD-9AD3-4FB47FE45CE1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{383E9E6C-BBFC-4CBA-A50E-78B58965A571} = {130D168A-C1EC-4634-B9CA-D9B34B42E1AE}
+		{C9B37062-020C-43FD-9AD3-4FB47FE45CE1} = {130D168A-C1EC-4634-B9CA-D9B34B42E1AE}
+	EndGlobalSection
+EndGlobal

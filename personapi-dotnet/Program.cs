@@ -37,3 +37,6 @@ app.MapControllers();
 app.MapControllerRoute(name: "default", pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
+
+// Necesario para WebApplicationFactory<Program> en las pruebas de integración.
+public partial class Program { }

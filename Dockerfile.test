@@ -1,0 +1,24 @@
+# syntax=docker/dockerfile:1
+# Ejecuta todas las pruebas (unitarias + integración) con el SDK de .NET 8.
+# Uso:  docker compose --profile test run --rm tests
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS test
+WORKDIR /src
+
+ENV DOTNET_CLI_TELEMETRY_OPTOUT=1 \
+    DOTNET_NOLOGO=1
+
+# Restaurar primero (capa cacheable mientras no cambien los .csproj)
+COPY personapi-dotnet.sln ./
+COPY personapi-dotnet/personapi-dotnet.csproj personapi-dotnet/
+COPY tests/personapi-dotnet.UnitTests/personapi-dotnet.UnitTests.csproj tests/personapi-dotnet.UnitTests/
+COPY tests/personapi-dotnet.IntegrationTests/personapi-dotnet.IntegrationTests.csproj tests/personapi-dotnet.IntegrationTests/
+RUN dotnet restore personapi-dotnet.sln
+
+COPY . .
+RUN dotnet build personapi-dotnet.sln -c Release --no-restore
+
+ENTRYPOINT ["dotnet", "test", "personapi-dotnet.sln", "-c", "Release", "--no-build", \
+            "--logger", "console;verbosity=normal", \
+            "--logger", "trx", \
+            "--results-directory", "/src/TestResults", \
+            "--collect:XPlat Code Coverage"]
